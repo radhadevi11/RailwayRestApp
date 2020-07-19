@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="station.js">
+    </script>
+
+    <script src="train.js">
+    </script>
+
+    <script src="service.js"></script>
+
+    <script type="text/javascript">
+      var trains;
+      var map;
+
+        function getPossibleTrains(){
+          if(!checkEmptyTextBox()){
+            return;
+          }
+          trains=getAllTrains();
+          if(trains.length==0){
+            alert("There is no train available for this stations");
+          }
+          var tableHeader=
+          "<table id="+"train"+">\n"+
+      "<tr>\n"+
+        "<th>TrainName</th>\n"+
+        "<th>TrainNumber</th>\n"+
+        "<th>SourceStation</th>\n"+
+        "<th>DestinationStation</th>\n"+
+      "</tr>\n";
+
+          var trainDetail ="";
+          for(var i=0;i<trains.length;i++){
+             var tableBody=
+                 "<tr onmouseover=\"drawLines("+i+")\"onmouseout=\"removeLine()\"onclick=\"showStops("+i+")\">\n"+
+        "<td>"+trains[i].name+"</td>\n"+
+        "<td>"+trains[i].number+"</td>\n"+
+        "<td>"+trains[i].sourceStation.name+"</td>\n"+
+        "<td>"+trains[i].destinationStation.name+"</td>\n"+
+        "</tr>\n";
+              trainDetail = trainDetail+tableBody;
+
+          }
+
+          document.getElementById('trainResult').innerHTML=tableHeader+trainDetail+"</table>";
+
+
+        }
+
+
+       function arrayOfCities(){
+              var cities = getAllStations();
+               map = new google.maps.Map(document.getElementById('map'), {/*google.maps.map constructor The ID where the map will place,which location will be center,How much the map will be zoom*/
+                center:{lat:11.5246,lng: 77.4702},
+                zoom:7
+              });
+              for(var i=0;i<cities.length;i++){
+                cities[i].addMarker(map);//calling addMarker function for adding marker for given
+
+              }
+       }
+      function checkEmptyTextBox() {
+    var sourceStationValue = document.getElementById('sourceStation').value;
+    var destinationStationValue = document.getElementById('destinationStation').value;
+    if(sourceStationValue == "" || destinationStationValue==""){
+       alert("Please choose both the source and the destination stations");
+        return false;
+    }
+    else{
+      return true;
+    }
+
+}
+    function showStops(trainPosition){
+      //show the intermediate stations for the train which the user choose
+      //Get the train from trainPosition of trains array
+      //For each TrainStop in the train print the information in a table row
+      //put the table in the stops div innerHtml
+      var currentTrainStops=trains[trainPosition].trainStops;
+       var tableHeader=
+          "<table id="+"train"+">\n"+
+      "<tr>\n"+
+        "<th>ArrivalTime</th>\n"+
+        "<th>DepartureTime</th>\n"+
+        "<th>Sequence</th>\n"+
+        "<th>stationName</th>\n"+
+        "<th>Distance</th>\n"+
+      "</tr>\n";
+
+      var trainStopDetail ="";
+          for(var i=0;i<currentTrainStops.length;i++){
+             var tableBody=
+                 "<tr>\n"+
+        "<td>"+currentTrainStops[i].arrivalTime+"</td>\n"+
+        "<td>"+currentTrainStops[i].departureTime+"</td>\n"+
+        "<td>"+currentTrainStops[i].sequence+"</td>\n"+
+        "<td>"+currentTrainStops[i].stationName+"</td>\n"+
+        "<td>"+currentTrainStops[i].distance+"</td>\n"+
+        "</tr>\n";
+              trainStopDetail = trainStopDetail+tableBody;
+
+          }
+      document.getElementById('stops').innerHTML = tableHeader+trainStopDetail+"</table>";
+      document.getElementById('stops').innerHTML =  document.getElementById('stops').innerHTML+"<button onclick=\"closeStopsPopUp()\">Close</button>";
+      openStopsPopUp();
+      document.getElementById('stops').innerHTML =  document.getElementById('stops').innerHTML+""
+
+    }
+    function closeStopsPopUp(){
+       document.getElementById('stops').setAttribute('class','hiddenStops');
+    }
+    function openStopsPopUp(){
+      document.getElementById('stops').setAttribute('class','visibleStops');
+    }
+    function getLatLngs(trainPosition){
+      var currentTrainStops=trains[trainPosition].trainStops;
+      var latLngResult = [];
+      for(var i=0;i<currentTrainStops.length;i++){
+           latLngResult.push(trains[trainPosition].trainStops[i].latLng);
+       }
+       return latLngResult;
+
+    }
+    function drawLines(trainPosition){
+      var latLngResult = getLatLngs(trainPosition);
+      var stationPathCoordinates =[];
+      for(var i=0;i<latLngResult.length;i++){
+           stationPathCoordinates.push({lat:latLngResult[i].lat,lng:latLngResult[i].lng});
+      }
+
+     stationPath = new google.maps.Polyline({
+          path: stationPathCoordinates,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+      addLine();
+    }
+
+    function addLine() {
+        stationPath.setMap(map);
+    }
+     function removeLine() {
+        stationPath.setMap(null);
+      }
+</script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmDJDvkorNNmPnv-uCOc8ArMpckF0FuYg&callback=arrayOfCities" async defer>
+    </script>
+
+    <meta charset="UTF-8">
+    <title>RailwayMap</title>
+    <style>
+            /* Optional: Makes the sample page fill the window. */
+            html, body {
+              height: 100%;
+              margin: 0;
+              padding: 0;
+            }
+            /* Always set the map height explicitly to define the size of the div
+             * element that contains the map. */
+            #map{width:60%;float:left;height:100%;}
+            #text{width:40%;float:right;height:100%;}
+            #trainResult{width:100%;height:70%;}
+
+    #train {
+        border: 2px solid black;
+        padding: 3px;
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #train td, #train th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #train tr:nth-child(even){background-color: #f2f2f2;}
+
+    #train tr:hover {background-color: #ddd;}
+
+    #train th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+    }
+    #stops {
+    border: 2px solid black;
+    width: 600px;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    top: 10%;
+    left: 20%;
+    margin-left: -80px;
+   }
+   .hiddenStops{
+    visibility: hidden;
+   }
+   .visibleStops{
+    visibility: visible;
+   }
+
+
+          </style>
+</head>
+
+<body>
+<div id="map"></div>
+<div id="text">
+    <form >
+        Enter the sourceStation :<br>
+        <input type="text" name="sourceStation" id="sourceStation"  readonly>
+        <br><br>
+        <input type="hidden" id="sourceStationCode" name="sourceStationCode">
+
+        Enter the destinationStation :<br>
+        <input type="text" name="destinationStation" id="destinationStation" readonly>
+        <input type="hidden" name="destinationStationCode" id="destinationStationCode">
+        <br><br>
+        <button onclick="getPossibleTrains();return false;">GetTrains</button>
+        <input type="reset" value="Clear">
+    </form>
+    <div id="trainResult">
+    </div>
+</div>
+<div id="stops" class="hiddenStops">
+</div>
+</body>
+</html>
