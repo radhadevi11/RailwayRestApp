@@ -1,8 +1,8 @@
 package com.radha.railwayrest.rest.controller;
 
 import com.radha.railwayrest.app.domain.Station;
-import com.radha.railwayrest.rest.mapper.StationMapper;
-import com.radha.railwayrest.rest.mapper.StationModel;
+import com.radha.railwayrest.rest.mapper.StationModelMapper;
+import com.radha.railwayrest.rest.model.StationModel;
 import com.radha.railwayrest.app.service.NoSuchFromStationException;
 import com.radha.railwayrest.app.service.StationService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +18,11 @@ import java.util.Map;
 @RequestMapping("/stations")
 public class StationRestController {
     private StationService stationService;
-    private StationMapper stationMapper;
+    private StationModelMapper stationModelMapper;
 
-    public StationRestController(StationService stationService, StationMapper stationMapper) {
+    public StationRestController(StationService stationService, StationModelMapper stationModelMapper) {
         this.stationService = stationService;
-        this.stationMapper = stationMapper;
+        this.stationModelMapper = stationModelMapper;
     }
 
     @GetMapping
@@ -30,13 +30,13 @@ public class StationRestController {
         //StationDaoImpl stationDao = new StationDaoImpl();
        // return stationDao.getAll();
         Map<String, Station> fromStations = stationService.getFromStations();
-        return stationMapper.convertToStationModels(fromStations.values());
+        return stationModelMapper.convertToStationModels(fromStations.values());
     }
 
     @GetMapping("/{fromStationCode}")
     public List<StationModel> getAllToStations(@PathVariable(value = "fromStationCode")
                                                            String fromStationCode) throws IOException, NoSuchFromStationException {
         Map<String, Station> toStations =stationService.getToStations(fromStationCode);
-        return stationMapper.convertToStationModels(toStations.values());
+        return stationModelMapper.convertToStationModels(toStations.values());
     }
 }

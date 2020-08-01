@@ -2,18 +2,20 @@ package com.radha.railwayrest.rest.mapper;
 
 import com.radha.railwayrest.app.domain.Station;
 import com.radha.railwayrest.app.domain.TrainStop;
+import com.radha.railwayrest.rest.model.StationModel;
+import com.radha.railwayrest.rest.model.TrainStopModel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class TrainStopMapper {
+public class TrainStopModelMapper {
 
-    private StationMapper stationMapper;
+    private StationModelMapper stationModelMapper;
 
-    public TrainStopMapper(StationMapper stationMapper) {
-        this.stationMapper = stationMapper;
+    public TrainStopModelMapper(StationModelMapper stationModelMapper) {
+        this.stationModelMapper = stationModelMapper;
     }
 
      List<TrainStopModel> convertToTrainStopModels(List<TrainStop> trainStops) {
@@ -29,7 +31,7 @@ public class TrainStopMapper {
 
     TrainStopModel convertToTrainStopModel(TrainStop trainStop) {
         Station station = trainStop.getStation();
-        StationModel stationModel = stationMapper.convertToStationModel(station);
+        StationModel stationModel = stationModelMapper.convertToStationModel(station);
         return new TrainStopModel(trainStop.getArrivalTime(),trainStop.getDepartureTime(),trainStop.getSequence(),stationModel,trainStop.getDistance());
 
 

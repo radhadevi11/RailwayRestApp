@@ -1,4 +1,4 @@
-package com.radha.railwayrest.rest.mapper;
+package com.radha.railwayrest.rest.model;
 
 public class TrainStopModel {
     private String arrivalTime;

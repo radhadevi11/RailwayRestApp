@@ -1,4 +1,4 @@
-package com.radha.railwayrest.rest.mapper;
+package com.radha.railwayrest.rest.model;
 
 import java.util.List;
 

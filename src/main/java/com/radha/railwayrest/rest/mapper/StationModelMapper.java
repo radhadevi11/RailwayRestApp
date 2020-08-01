@@ -2,13 +2,14 @@ package com.radha.railwayrest.rest.mapper;
 
 
 import com.radha.railwayrest.app.domain.Station;
+import com.radha.railwayrest.rest.model.StationModel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Component
-public class StationMapper {
+public class StationModelMapper {
     public StationModel convertToStationModel(Station station) {
         return new StationModel(station.getName(),station.getCode(),station.getLatLng());
     }

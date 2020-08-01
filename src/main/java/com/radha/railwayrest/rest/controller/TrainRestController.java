@@ -1,8 +1,8 @@
 package com.radha.railwayrest.rest.controller;
 
 import com.radha.railwayrest.app.domain.Train;
-import com.radha.railwayrest.rest.mapper.TrainMapper;
-import com.radha.railwayrest.rest.mapper.TrainModel;
+import com.radha.railwayrest.rest.mapper.TrainModelMapper;
+import com.radha.railwayrest.rest.model.TrainModel;
 import com.radha.railwayrest.app.service.NoSuchFromStationException;
 import com.radha.railwayrest.app.service.NoSuchToStationException;
 import com.radha.railwayrest.app.service.TrainService;
@@ -20,10 +20,10 @@ import java.util.List;
 
 public class TrainRestController {
     private TrainService trainService;
-    private TrainMapper trainMapper;
-    public TrainRestController(TrainService trainService, TrainMapper trainMapper) {
+    private TrainModelMapper trainModelMapper;
+    public TrainRestController(TrainService trainService, TrainModelMapper trainModelMapper) {
         this.trainService = trainService;
-        this.trainMapper = trainMapper;
+        this.trainModelMapper = trainModelMapper;
     }
     @GetMapping("/{sourceStationCode}/{destinationStationCode}")
     List<TrainModel> getTrains(@PathVariable( "sourceStationCode") String sourceStationCode,
@@ -31,7 +31,7 @@ public class TrainRestController {
         List<Train> trains =  trainService.getTrains(sourceStationCode, destinationStationCode);
         ArrayList<TrainModel> trainModels = new ArrayList<>();
         for(Train train : trains){
-            trainModels.add(trainMapper.convertToTrainModel(train));
+            trainModels.add(trainModelMapper.convertToTrainModel(train));
 
         }
         return trainModels;

@@ -1,5 +1,5 @@
 
-package com.radha.railwayrest.rest.mapper;
+package com.radha.railwayrest.rest.model;
 
 import com.radha.railwayrest.app.domain.LatLng;
 
