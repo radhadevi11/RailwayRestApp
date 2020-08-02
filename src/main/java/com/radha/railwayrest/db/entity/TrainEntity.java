@@ -1,8 +1,10 @@
 package com.radha.railwayrest.db.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "train")
 public class TrainEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -21,19 +23,25 @@ public class TrainEntity {
     @JoinColumn(name = "destination_station_id", nullable = false, updatable = false)
     private StationEntity destinationStation;
 
+    @OneToMany(mappedBy = "train")
+    private List<TrainStopEntity> trainStops;
+
     public TrainEntity() {
     }
 
-    public TrainEntity(String name, String number, StationEntity sourceStation, StationEntity destinationStation) {
-        this(null, name, number, sourceStation, destinationStation);
+    public TrainEntity(String name, String number, StationEntity sourceStation, StationEntity destinationStation,
+                       List<TrainStopEntity> trainStops) {
+        this(null, name, number, sourceStation, destinationStation, trainStops);
     }
 
-    public TrainEntity(Integer id, String name, String number, StationEntity sourceStation, StationEntity destinationStation) {
+    public TrainEntity(Integer id, String name, String number, StationEntity sourceStation,
+                       StationEntity destinationStation, List<TrainStopEntity> trainStops) {
         this.id = id;
         this.name = name;
         this.number = number;
         this.sourceStation = sourceStation;
         this.destinationStation = destinationStation;
+        this.trainStops = trainStops;
     }
 
     public TrainEntity(Integer id){
@@ -87,5 +95,9 @@ public class TrainEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<TrainStopEntity> getTrainStops() {
+        return trainStops;
     }
 }

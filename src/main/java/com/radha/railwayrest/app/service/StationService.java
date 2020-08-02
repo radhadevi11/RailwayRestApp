@@ -9,19 +9,15 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 @Component
 public class StationService {
-    private TimeTable timeTable;
-
-    public StationService(TimeTable timeTable) {
-        this.timeTable = timeTable;
-    }
 
     public Map<String, Station> getToStations(String fromStationCode) throws IOException, NoSuchFromStationException {
-        return getToStations(fromStationCode, timeTable);
+        return null;
     }
     Map<String, Station> getToStations(String fromStationCode, TimeTable timeTable) throws NoSuchFromStationException {
           /* Algorithm:
@@ -43,7 +39,7 @@ public class StationService {
         for (TrainStop trainStop : fromStation.getTrainStops()) {
             int sequence = trainStop.getSequence();
             Train stoppingTrain = trainStop.getTrain();
-            ArrayList<Station> stopingStations = stoppingTrain.getStoppingStations(sequence);
+            List<Station> stopingStations = stoppingTrain.getStoppingStations(sequence);
             for (Station stoppingStation : stopingStations) {
                 destinationStations.put(stoppingStation.getCode(), stoppingStation);
             }
@@ -54,7 +50,7 @@ public class StationService {
     }
 
     private Map<String, Station> getDestinationStation(Train stoppingTrain, int sequence){
-        ArrayList<Station> stopingStations = stoppingTrain.getStoppingStations(sequence);
+        List<Station> stopingStations = stoppingTrain.getStoppingStations(sequence);
         return stopingStations.stream()
                 .collect(Collectors.toMap(Station::getCode, Function.identity()));
 
@@ -62,6 +58,6 @@ public class StationService {
 
 
     public Map<String, Station> getFromStations() throws IOException {
-        return timeTable.getStations();
+        return null;
     }
 }

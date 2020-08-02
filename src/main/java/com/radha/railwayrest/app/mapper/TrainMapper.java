@@ -2,14 +2,18 @@ package com.radha.railwayrest.app.mapper;
 
 import com.radha.railwayrest.app.domain.Train;
 import com.radha.railwayrest.db.entity.TrainEntity;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+@Lazy
 @Component
 public class TrainMapper {
     private StationMapper stationMapper;
+    private TrainStopMapper trainStopMapper;
 
-    public TrainMapper(StationMapper stationMapper) {
+    public TrainMapper(StationMapper stationMapper, TrainStopMapper trainStopMapper) {
         this.stationMapper = stationMapper;
+        this.trainStopMapper = trainStopMapper;
     }
 
     public Train toDomain(TrainEntity trainEntity) {
@@ -17,6 +21,9 @@ public class TrainMapper {
                 trainEntity.getName(),
                 trainEntity.getNumber(),
                 stationMapper.toDomain(trainEntity.getSourceStation()),
-                stationMapper.toDomain(trainEntity.getDestinationStation()));
+                stationMapper.toDomain(trainEntity.getDestinationStation()),
+                trainStopMapper.toDomain(trainEntity.getTrainStops()));
+
     }
+
 }

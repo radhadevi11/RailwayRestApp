@@ -1,6 +1,8 @@
 package com.radha.railwayrest.app.domain;
 
 
+import java.util.Objects;
+
 public class TrainStop {
     private Integer id;
     private String arrivalTime;
@@ -9,6 +11,7 @@ public class TrainStop {
     private int sequence;
     private Station station;
     private long distance;
+
 
     public TrainStop(String arrivalTime, String departureTime, Train train, int sequence, Station station, long distance) {
         this(null, arrivalTime, departureTime, train, sequence, station, distance);
@@ -83,5 +86,10 @@ public class TrainStop {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTrain(), getStation());
     }
 }

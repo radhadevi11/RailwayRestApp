@@ -19,7 +19,9 @@ public class TrainStopService {
         this.trainStopMapper = trainStopMapper;
     }
     List<TrainStop> getAllTrainStopsForStation (String stationCode) {
+
         List<TrainStopEntity> trainStops = trainStopRepo.findByStationCode (stationCode);
+
         return trainStops.stream()
                 .map(trainStopEntity -> trainStopMapper.toDomain(trainStopEntity))
                 .collect(Collectors.toList());

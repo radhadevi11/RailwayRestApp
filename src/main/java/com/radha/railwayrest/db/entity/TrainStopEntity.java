@@ -3,6 +3,7 @@ package com.radha.railwayrest.db.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "train_stop")
 public class TrainStopEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -12,7 +13,7 @@ public class TrainStopEntity {
     private String arrivalTime;
     @Column(name = "departure_time")
     private String departureTime;
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "train_id", nullable = false, updatable = false)
     private TrainEntity train;
     @Column(name = "sequence")

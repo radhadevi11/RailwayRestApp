@@ -1,15 +1,20 @@
 package com.radha.railwayrest.app.mapper;
 
+import com.radha.railwayrest.app.domain.Train;
 import com.radha.railwayrest.app.domain.TrainStop;
 import com.radha.railwayrest.db.entity.TrainStopEntity;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TrainStopMapper {
     private StationMapper stationMapper;
     private TrainMapper trainMapper;
 
-    public TrainStopMapper(StationMapper stationMapper, TrainMapper trainMapper) {
+    public TrainStopMapper(StationMapper stationMapper, @Lazy TrainMapper trainMapper) {
         this.stationMapper = stationMapper;
         this.trainMapper = trainMapper;
     }
@@ -18,9 +23,15 @@ public class TrainStopMapper {
         return new TrainStop(trainStopEntity.getId(),
                 trainStopEntity.getArrivalTime(),
                 trainStopEntity.getDepartureTime(),
-                trainMapper.toDomain(trainStopEntity.getTrain()),
+                new Train(trainStopEntity.getTrain().getId()),
                 trainStopEntity.getSequence(),
                 stationMapper.toDomain(trainStopEntity.getStation()),
+
                 0);
+    }
+    public List<TrainStop> toDomain(List<TrainStopEntity> trainStopEntities) {
+        return trainStopEntities.stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 }

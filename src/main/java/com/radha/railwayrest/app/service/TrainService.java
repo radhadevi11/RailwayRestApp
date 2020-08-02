@@ -24,23 +24,38 @@ public class TrainService {
     }
 
 
-    public List<Train> getTrains(String sourceStationCode, String destinationStationCode) {
+    public List<Train> getTrains(String sourceStationCode, String destinationStationCode) throws NoSuchFromStationException, NoSuchToStationException {
         //TODO Validate the sourceStationCode and destinationStationCode
+
         List<TrainStop> sourceStationTrainStops = trainStopService.getAllTrainStopsForStation(sourceStationCode);
+
+        if(sourceStationTrainStops.isEmpty()){
+            throw new NoSuchFromStationException("The given fromStation code " + sourceStationCode + " is not found");
+        }
+
         List<TrainStop> destinationStationTrainStops = trainStopService.getAllTrainStopsForStation(destinationStationCode);
 
+        if(destinationStationTrainStops.isEmpty()) {
+            throw new NoSuchToStationException("The given toStation code " + destinationStationCode + " is not found");
+        }
         Map<Integer, TrainStop> sourceStationMap = sourceStationTrainStops.stream()
                 .collect(Collectors.toMap(trainStop -> trainStop.getTrain().getId(), Function.identity()));
 
+        return getTrains(destinationStationTrainStops, sourceStationMap);
+
+
+    }
+
+    private List<Train> getTrains(List<TrainStop> destinationStationTrainStops, Map<Integer, TrainStop> sourceStationMap) {
         return destinationStationTrainStops.stream()
-                .filter(destinationStationTrainStop -> {
-                    TrainStop sourceStationTrainStop = sourceStationMap.get(destinationStationTrainStop.getTrain().getId());
-                    return sourceStationTrainStop != null && sourceStationTrainStop.isBeforeStop(destinationStationTrainStop);
-                })
+                .filter(destinationStationTrainStop -> isBeforeStop(sourceStationMap, destinationStationTrainStop))
                 .map(TrainStop::getTrain)
                 .collect(Collectors.toList());
+    }
 
-
+    private boolean isBeforeStop(Map<Integer, TrainStop> sourceStationMap, TrainStop destinationStationTrainStop) {
+        TrainStop sourceStationTrainStop = sourceStationMap.get(destinationStationTrainStop.getTrain().getId());
+        return sourceStationTrainStop != null && sourceStationTrainStop.isBeforeStop(destinationStationTrainStop);
     }
 }
 

@@ -1,6 +1,8 @@
 package com.radha.railwayrest.app.domain;
 
 import java.util.ArrayList;
+import java.util.List;
+
 public class Train {
 
     private Integer id;
@@ -9,19 +11,21 @@ public class Train {
     private Station sourceStation;
     private Station destinationStation;
 
-    private ArrayList<TrainStop> trainStops = new ArrayList<>();
+    private List<TrainStop> trainStops ;
 
 
-    public Train(String name, String number, Station sourceStation, Station destinationStation) {
-        this(null, name, number, sourceStation, destinationStation);
+    public Train(String name, String number, Station sourceStation, Station destinationStation, List<TrainStop> trainStops) {
+        this(null, name, number, sourceStation, destinationStation, trainStops);
     }
 
-    public Train(Integer id, String name, String number, Station sourceStation, Station destinationStation) {
+    public Train(Integer id, String name, String number, Station sourceStation, Station destinationStation,
+                 List<TrainStop> trainStops) {
         this.id = id;
         this.name = name;
         this.number = number;
         this.sourceStation = sourceStation;
         this.destinationStation = destinationStation;
+        this.trainStops = trainStops;
     }
 
     public Train(Integer id){
@@ -44,14 +48,14 @@ public class Train {
         return destinationStation;
     }
 
-    public ArrayList<TrainStop> getTrainStops() {
+    public List<TrainStop> getTrainStops() {
         return trainStops;
     }
 
     public void addTrainStop(TrainStop stop) {
         trainStops.add(stop);
     }
-    public ArrayList<Station> getStoppingStations(int sequence){
+    public List<Station> getStoppingStations(int sequence){
          ArrayList<Station> stations = new ArrayList<>();
          for(TrainStop currentStop : trainStops ) {
              if(currentStop.getSequence() > sequence) {

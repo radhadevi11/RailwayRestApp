@@ -19,7 +19,7 @@ public class RailwayrestApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayrestApplication.class, args);
 	}
-	@Bean
+	/*@Bean
 	public CommandLineRunner demoForStationRepo(StationRepo repository) {
 		return (args) -> {
 			log.info("Stations found with findAll():");
@@ -92,6 +92,6 @@ public class RailwayrestApplication {
 
 		};
 
-	};
+	};*/
 
 }

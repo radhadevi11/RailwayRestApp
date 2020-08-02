@@ -25,7 +25,7 @@ public class TrainModelMapper {
         StationModel sourceStationModel = stationModelMapper.convertToStationModel(sourceStation);
         Station destinationStation = train.getDestinationStation();
         StationModel destinationStationModel = stationModelMapper.convertToStationModel(destinationStation);
-        ArrayList<TrainStop> trainStops = train.getTrainStops();
+        List<TrainStop> trainStops = train.getTrainStops();
         List<TrainStopModel> trainStopModels = trainStopModelMapper.convertToTrainStopModels(trainStops);
         return new TrainModel(train.getName(),train.getNumber(),sourceStationModel,destinationStationModel,trainStopModels);
     }
