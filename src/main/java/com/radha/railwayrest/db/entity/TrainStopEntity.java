@@ -13,7 +13,7 @@ public class TrainStopEntity {
     private String arrivalTime;
     @Column(name = "departure_time")
     private String departureTime;
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "train_id", nullable = false, updatable = false)
     private TrainEntity train;
     @Column(name = "sequence")
@@ -74,7 +74,7 @@ public class TrainStopEntity {
         return "TrainStop{" +
                 "arrivalTime='" + arrivalTime + '\'' +
                 ", departureTime='" + departureTime + '\'' +
-                ", train=" + train.getNumber() +
+                 ", train=" + train.getNumber() +
                 ", sequence=" + sequence +
                 ", station=" + station.getCode() +
                 '}';

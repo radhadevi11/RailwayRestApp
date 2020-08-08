@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TrainRepo extends CrudRepository<TrainEntity, Integer> {
-    @Override
-    Optional<TrainEntity> findById(Integer id);
+
+    TrainEntity findById(int id);
     List<TrainEntity> findBySourceStation(StationEntity sourceStation);
     List<TrainEntity> findBySourceStationId(Integer sourceStationId);
 

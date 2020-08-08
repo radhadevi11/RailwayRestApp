@@ -21,6 +21,7 @@ public class TrainModelMapper {
     }
 
     public TrainModel convertToTrainModel(Train train) {
+
         Station sourceStation = train.getSourceStation();
         StationModel sourceStationModel = stationModelMapper.convertToStationModel(sourceStation);
         Station destinationStation = train.getDestinationStation();

@@ -69,7 +69,7 @@ public class Train {
     public boolean equals(Object other) {
         if (other instanceof Train) {
             Train otherTrain = (Train) other;
-            if (this.getNumber().equals(otherTrain.getNumber())) {
+            if (this.getId() == otherTrain.getId()) {
                 return true;
             }
             else {

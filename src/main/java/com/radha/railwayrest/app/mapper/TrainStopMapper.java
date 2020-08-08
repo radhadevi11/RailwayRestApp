@@ -12,11 +12,9 @@ import java.util.stream.Collectors;
 @Component
 public class TrainStopMapper {
     private StationMapper stationMapper;
-    private TrainMapper trainMapper;
 
-    public TrainStopMapper(StationMapper stationMapper, @Lazy TrainMapper trainMapper) {
+    public TrainStopMapper(StationMapper stationMapper) {
         this.stationMapper = stationMapper;
-        this.trainMapper = trainMapper;
     }
 
     public TrainStop toDomain(TrainStopEntity trainStopEntity) {
