@@ -1,9 +1,7 @@
 package com.radha.railwayrest.app.mapper;
 
 import com.radha.railwayrest.app.domain.Train;
-import com.radha.railwayrest.app.domain.TrainStop;
 import com.radha.railwayrest.db.entity.TrainEntity;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

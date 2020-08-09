@@ -15,20 +15,27 @@ public class StationEntity {
     private String name;
     @Column(name = "station_code")
     private String code;
+    @Column(name = "latitude")
+    private double latitude;
+    @Column(name = "longitude")
+    private double longitude;
+
 
     public StationEntity() {
     }
 
 
 
-    public StationEntity(String name, String code) {
-        this(null, name, code);
+    public StationEntity(String name, String code, double latitude, double longitude) {
+        this(null, name, code, latitude, longitude);
     }
 
-    public StationEntity(Integer id, String name, String code) {
+    public StationEntity(Integer id, String name, String code, double latitude, double longitude) {
         this.id = id;
         this.name = name;
         this.code = code;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public StationEntity(Integer id){
@@ -65,5 +72,13 @@ public class StationEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }

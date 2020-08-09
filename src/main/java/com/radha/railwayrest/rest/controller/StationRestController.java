@@ -27,10 +27,7 @@ public class StationRestController {
 
     @GetMapping
     public List<StationModel> getAllFromStations() throws IOException {
-        //StationDaoImpl stationDao = new StationDaoImpl();
-       // return stationDao.getAll();
-        Map<String, Station> fromStations = stationService.getFromStations();
-        return stationModelMapper.convertToStationModels(fromStations.values());
+        return stationModelMapper.convertToStationModels(stationService.getFromStations());
     }
 
     @GetMapping("/{fromStationCode}")

@@ -113,20 +113,13 @@
     function openStopsPopUp(){
       document.getElementById('stops').setAttribute('class','visibleStops');
     }
-    function getLatLngs(trainPosition){
-      var currentTrainStops=trains[trainPosition].trainStops;
-      var latLngResult = [];
-      for(var i=0;i<currentTrainStops.length;i++){
-           latLngResult.push(trains[trainPosition].trainStops[i].latLng);
-       }
-       return latLngResult;
 
-    }
     function drawLines(trainPosition){
-      var latLngResult = getLatLngs(trainPosition);
+      var currentTrainStops=trains[trainPosition].trainStops;
       var stationPathCoordinates =[];
-      for(var i=0;i<latLngResult.length;i++){
-           stationPathCoordinates.push({lat:latLngResult[i].lat,lng:latLngResult[i].lng});
+      for(var i=0;i<currentTrainStops.length;i++){
+           stationPathCoordinates.push({lat:trains[trainPosition].trainStops[i].latitude,
+           lng:trains[trainPosition].trainStops[i].longitude});
       }
 
      stationPath = new google.maps.Polyline({

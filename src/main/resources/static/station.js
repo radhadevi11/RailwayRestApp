@@ -1,14 +1,10 @@
-class LatLng {
-    constructor(lat, lng) {
-      this.lat = lat;
-      this.lng = lng;
-    }
-}
+
 class Station{
-    constructor(latLng,code,name){
-        this.latLng = latLng;
+    constructor(code,name, latitude, longitude){
         this.code = code;
         this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
   
     addMarker(map){
@@ -19,7 +15,7 @@ class Station{
             fillColor: '#FF0000',
             fillOpacity: 0.35,
             map: map,
-            center: this.latLng,
+            center: {lat : this.latitude, lng : this.longitude},
             radius: 3000,
             title:this.name
           });

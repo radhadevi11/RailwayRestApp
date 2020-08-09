@@ -8,9 +8,10 @@
          var stations=[] ;
          for(var i=0;i<stationsJsonArray.length;i++){
             stations.push(new Station(
-                new LatLng(stationsJsonArray[i].latLng.latitude,stationsJsonArray[i].latLng.longitude),
                 stationsJsonArray[i].code,
-                stationsJsonArray[i].name));
+                stationsJsonArray[i].name,
+                stationsJsonArray[i].latitude,
+                stationsJsonArray[i].longitude));
          }
          return stations;
 
@@ -33,16 +34,14 @@
          			     trainsJsonArray[i].trainStops[j].sequence,
          			     trainsJsonArray[i].trainStops[j].station.name,
          			     trainsJsonArray[i].trainStops[j].distance,
-                        new LatLng(trainsJsonArray[i].trainStops[j].station.latLng.latitude,
-                            trainsJsonArray[i].trainStops[j].station.latLng.longitude)
+                         trainsJsonArray[i].trainStops[j].station.latitude,
+                         trainsJsonArray[i].trainStops[j].station.longitude
          			    ));
          	}
             trains.push(new Train(trainsJsonArray[i].number,
             	trainsJsonArray[i].name,
             	trainsJsonArray[i].sourceStation,
-            	trainsJsonArray[i].destinationStation,trainStops)
-
-                );
+            	trainsJsonArray[i].destinationStation,trainStops));
          }
          return trains;
 

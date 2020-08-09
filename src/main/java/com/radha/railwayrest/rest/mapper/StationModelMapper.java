@@ -7,14 +7,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Component
 public class StationModelMapper {
     public StationModel convertToStationModel(Station station) {
-        return new StationModel(station.getName(),station.getCode(),station.getLatLng());
+        return new StationModel(station.getName(),station.getCode(), station.getLatitude(), station.getLongitude());
     }
-     public ArrayList<StationModel> convertToStationModels(Collection<Station> stations) {
-        ArrayList<StationModel> stationModels = new ArrayList<>();
+     public List<StationModel> convertToStationModels(Collection<Station> stations) {
+        List<StationModel> stationModels = new ArrayList<>();
         for(Station station : stations){
             stationModels.add(convertToStationModel(station));
 

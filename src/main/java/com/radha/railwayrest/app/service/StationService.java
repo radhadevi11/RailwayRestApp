@@ -4,10 +4,11 @@ import com.radha.railwayrest.app.domain.Station;
 import com.radha.railwayrest.app.domain.TimeTable;
 import com.radha.railwayrest.app.domain.Train;
 import com.radha.railwayrest.app.domain.TrainStop;
+import com.radha.railwayrest.app.mapper.StationMapper;
+import com.radha.railwayrest.db.repo.StationRepo;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 @Component
 public class StationService {
+    private StationRepo stationRepo;
+    private StationMapper stationMapper;
+
+    public StationService(StationRepo stationRepo, StationMapper stationMapper) {
+        this.stationRepo = stationRepo;
+        this.stationMapper = stationMapper;
+    }
+
 
     public Map<String, Station> getToStations(String fromStationCode) throws IOException, NoSuchFromStationException {
         return null;
@@ -57,7 +66,7 @@ public class StationService {
     }
 
 
-    public Map<String, Station> getFromStations() throws IOException {
-        return null;
+    public List<Station> getFromStations() throws IOException {
+        return stationMapper.toDomain(stationRepo.findAll());
     }
 }
