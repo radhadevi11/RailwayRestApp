@@ -27,7 +27,7 @@
             #text{width:40%;float:right;height:100%;}
             #trainResult{width:100%;height:70%;}
 
-    #train {
+    .train {
         border: 2px solid black;
         padding: 3px;
         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -35,16 +35,16 @@
         width: 100%;
     }
 
-    #train td, #train th {
+    .train td, .train th {
         border: 1px solid #ddd;
         padding: 8px;
     }
 
-    #train tr:nth-child(even){background-color: #f2f2f2;}
+    .train tr:nth-child(even){background-color: #f2f2f2;}
 
-    #train tr:hover {background-color: #ddd;}
+    .train tr:hover {background-color: #ddd;}
 
-    #train th {
+    .train th {
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
@@ -65,10 +65,10 @@
     left: 20%;
     margin-left: -80px;
    }
-   .hiddenStops{
+   .hidden{
     visibility: hidden;
    }
-   .visibleStops{
+   .visible{
     visibility: visible;
    }
 
@@ -92,10 +92,39 @@
         <button onclick="getPossibleTrains();return false;">GetTrains</button>
         <input type="reset" value="Clear">
     </form>
-    <div id="trainResult">
+    <div class="hidden" id="trainResult">
+        <table id = "trainsTable" class="train">
+            <thead>
+                <tr>
+                    <th>TrainName</th>
+                    <th>TrainNumber</th>
+                    <th>SourceStation</th>
+                    <th>DestinationStation</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
     </div>
+<div class="hidden" id = "stops">
+    <table id = "trainStops" class = "train">
+        <thead>
+            <tr>
+                <th>ArrivalTime</th>
+                <th>DepartureTime</th>
+                <th>Sequence</th>
+                <th>stationName</th>
+                <th>Distance</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+    </table>
+    <button onclick="closeStopsPopUp()">Close</button>
 </div>
-<div id="stops" class="hiddenStops">
 </div>
 </body>
 </html>

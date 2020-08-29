@@ -1,53 +1,30 @@
-    var trains;
+
     var map;
 
     function getPossibleTrains(){
       if(!checkEmptyTextBox()){
         return;
       }
-      trains=getAllTrains();
+      const trains=getAllTrains();
       if(trains.length==0){
         alert("There is no train available for this stations");
+        return;
       }
-      var tableHeader=
-        "<table id="+"train"+">\n"+
-        "<tr>\n"+
-        "<th>TrainName</th>\n"+
-        "<th>TrainNumber</th>\n"+
-        "<th>SourceStation</th>\n"+
-        "<th>DestinationStation</th>\n"+
-        "</tr>\n";
-
-
-        const reducer = (tableRowsString, train, i) => tableRowsString +"<tr onmouseover=\"drawLines("+i+")\"onmouseout=\"removeLine()\"onclick=\"showStops("+i+")\">\n"+
-                                                                     "<td>"+train.name+"</td>\n"+
-                                                                     "<td>"+train.number+"</td>\n"+
-                                                                     "<td>"+train.sourceStation.name+"</td>\n"+
-                                                                     "<td>"+train.destinationStation.name+"</td>\n"+
-                                                                     "</tr>\n";
-
-        /*trains.map(train => "<tr onmouseover=\"drawLines("+i+")\"onmouseout=\"removeLine()\"onclick=\"showStops("+i+")\">\n"+
-                            "<td>"+train.name+"</td>\n"+
-                            "<td>"+train.number+"</td>\n"+
-                            "<td>"+train.sourceStation.name+"</td>\n"+
-                            "<td>"+train.destinationStation.name+"</td>\n"+
-                            "</tr>\n")
-              .join("");
-
-      var trainDetail ="";
-      for(var i=0;i<trains.length;i++){
-         var tableBody=
-                "<tr onmouseover=\"drawLines("+i+")\"onmouseout=\"removeLine()\"onclick=\"showStops("+i+")\">\n"+
-                "<td>"+trains[i].name+"</td>\n"+
-                "<td>"+trains[i].number+"</td>\n"+
-                "<td>"+trains[i].sourceStation.name+"</td>\n"+
-                "<td>"+trains[i].destinationStation.name+"</td>\n"+
-                "</tr>\n";
-         trainDetail = trainDetail+tableBody;
-
-      }*/
-
-      document.getElementById('trainResult').innerHTML=tableHeader+trains.reduce(reducer, "")+"</table>";
+      document.getElementById("trainResult").setAttribute("class", "visible");
+      const table = document.getElementById("trainsTable");
+      const tBody = table.tBodies.item(0);
+      tBody.innerHTML = "";
+      trains.forEach((train) => populateRowWithTrainDetails(train, tBody));
+    }
+    function populateRowWithTrainDetails(train, tBody) {
+        const row = tBody.insertRow();
+        row.insertCell(0).innerHTML = train.name;
+        row.insertCell(1).innerHTML = train.number;
+        row.insertCell(2).innerHTML = train.sourceStation.name;
+        row.insertCell(3).innerHTML = train.destinationStation.name;
+        row.addEventListener("mouseover", function() {drawLines(train);});
+        row.addEventListener("mouseout", function(){removeLine()});
+        row.addEventListener("click", function(){showStops(train)});
     }
 
 
@@ -57,10 +34,7 @@
             center:{lat:11.5246,lng: 77.4702},
             zoom:7
           });
-          for(var i=0;i<cities.length;i++){
-            cities[i].addMarker(map);//calling addMarker function for adding marker for given
-
-          }
+          cities.forEach(city => city.addMarker(map));
      }
      function checkEmptyTextBox() {
           var sourceStationValue = document.getElementById('sourceStation').value;
@@ -74,53 +48,69 @@
           }
 
      }
-    function showStops(trainPosition){
+
+
+
+    function showStops(train){
       //show the intermediate stations for the train which the user choose
       //Get the train from trainPosition of trains array
       //For each TrainStop in the train print the information in a table row
       //put the table in the stops div innerHtml
-      var currentTrainStops=trains[trainPosition].trainStops;
-      var tableHeader=
-          "<table id="+"train"+">\n"+
-      "<tr>\n"+
-        "<th>ArrivalTime</th>\n"+
-        "<th>DepartureTime</th>\n"+
-        "<th>Sequence</th>\n"+
-        "<th>stationName</th>\n"+
-        "<th>Distance</th>\n"+
-      "</tr>\n";
 
-      var trainStopDetail ="";
-          for(var i=0;i<currentTrainStops.length;i++){
+      /*show all the trainStops of the given train in the stops div
+        - get all trainStops from the given trainPosition
+        - table = get the table element
+        - for each trainStops
+            create a row for table
+            create 5 cells in the row
+      */
 
-            var tableBody=
-                 "<tr>\n"+
-            "<td>"+currentTrainStops[i].arrivalTime+"</td>\n"+
-            "<td>"+currentTrainStops[i].departureTime+"</td>\n"+
-            "<td>"+currentTrainStops[i].sequence+"</td>\n"+
-            "<td>"+currentTrainStops[i].stationName+"</td>\n"+
-            "<td>"+currentTrainStops[i].distance+"</td>\n"+
-            "</tr>\n";
-            trainStopDetail = trainStopDetail+tableBody;
-
-          }
-      document.getElementById('stops').innerHTML = tableHeader+trainStopDetail+"</table>";
-      document.getElementById('stops').innerHTML =  document.getElementById('stops').innerHTML+"<button onclick=\"closeStopsPopUp()\">Close</button>";
+      const currentTrainStops=train.trainStops;
+      const table = document.getElementById("trainStops");
+      /*for(let i = 0; i < table.rows.length; i++) {
+        table.deleteRow(0);
+      }*/
+      const tBody = table.tBodies.item(0);
+      tBody.innerHTML = "";
+      const populateRow = (trainStop) => {
+                                         populateRowWithTrainStopDetails(tBody, trainStop);
+                                         }
+      currentTrainStops.forEach(populateRow);
       openStopsPopUp();
-      document.getElementById('stops').innerHTML =  document.getElementById('stops').innerHTML+""
 
+
+      /*var trainStopDetail ="";
+      const reducer = (trainStopRowString, trainStop) => trainStopRowString + "<tr>\n"+
+                                                            "<td>"+trainStop.arrivalTime+"</td>\n"+
+                                                            "<td>"+trainStop.departureTime+"</td>\n"+
+                                                            "<td>"+trainStop.sequence+"</td>\n"+
+                                                            "<td>"+trainStop.stationName+"</td>\n"+
+                                                            "<td>"+trainStop.distance+"</td>\n"+
+                                                            "</tr>\n"
+      document.getElementById('stops').innerHTML = tableHeader+currentTrainStops.reduce(reducer, "")+"</table>";*/
+
+      //document.getElementById('stops').innerHTML =  document.getElementById('stops').innerHTML+""
+
+    }
+
+    function populateRowWithTrainStopDetails(tBody, trainStop) {
+        const row = tBody.insertRow();
+        row.insertCell(0).innerHTML = trainStop.arrivalTime;
+        row.insertCell(1).innerHTML = trainStop.departureTime;
+        row.insertCell(2).innerHTML = trainStop.sequence;
+        row.insertCell(3).innerHTML = trainStop.stationName;
+        row.insertCell(4).innerHTML = trainStop.distance;
     }
     function closeStopsPopUp(){
-       document.getElementById('stops').setAttribute('class','hiddenStops');
+       document.getElementById('stops').setAttribute('class','hidden');
     }
     function openStopsPopUp(){
-      document.getElementById('stops').setAttribute('class','visibleStops');
+      document.getElementById('stops').setAttribute('class','visible');
     }
 
-    function drawLines(trainPosition){
-      var currentTrainStops=trains[trainPosition].trainStops;
-      var stationPathCoordinates =[];
-      stationPathCoordinates = currentTrainStops.map(trainStop =>
+    function drawLines(train){
+      var currentTrainStops=train.trainStops;
+      const stationPathCoordinates = currentTrainStops.map(trainStop =>
                                                     ({lat: trainStop.latitude,
                                                     lng: trainStop.longitude
                                                     }));
