@@ -1,31 +1,7 @@
 
     var map;
 
-    function getPossibleTrains(){
-      if(!checkEmptyTextBox()){
-        return;
-      }
-      const trains=getAllTrains();
-      if(trains.length==0){
-        alert("There is no train available for this stations");
-        return;
-      }
-      document.getElementById("trainResult").setAttribute("class", "visible");
-      const table = document.getElementById("trainsTable");
-      const tBody = table.tBodies.item(0);
-      tBody.innerHTML = "";
-      trains.forEach((train) => populateRowWithTrainDetails(train, tBody));
-    }
-    function populateRowWithTrainDetails(train, tBody) {
-        const row = tBody.insertRow();
-        row.insertCell(0).innerHTML = train.name;
-        row.insertCell(1).innerHTML = train.number;
-        row.insertCell(2).innerHTML = train.sourceStation.name;
-        row.insertCell(3).innerHTML = train.destinationStation.name;
-        row.addEventListener("mouseover", function() {drawLines(train);});
-        row.addEventListener("mouseout", function(){removeLine()});
-        row.addEventListener("click", function(){showStops(train)});
-    }
+
 
 
      function arrayOfCities(){
@@ -35,18 +11,6 @@
             zoom:7
           });
           cities.forEach(city => city.addMarker(map));
-     }
-     function checkEmptyTextBox() {
-          var sourceStationValue = document.getElementById('sourceStation').value;
-          var destinationStationValue = document.getElementById('destinationStation').value;
-          if(sourceStationValue == "" || destinationStationValue==""){
-            alert("Please choose both the source and the destination stations");
-            return false;
-          }
-          else{
-            return true;
-          }
-
      }
 
 
@@ -131,43 +95,8 @@
     function removeLine() {
         stationPath.setMap(null);
     }
-    function getAllStations(){
-        var request = new XMLHttpRequest(); //creating a object with the type of XMLHTTPRequest()
-         request.open('GET','http://localhost:8080/stations',false); //open method with the 3 parameter
-         request.send(null);//request body is null
-         var stationsJsonArray=JSON.parse(request.responseText);//resposeText is a string
-         //loop through this json array,
-         //and convert each json objects to a station object add a station object to a station array
-         var stations=[] ;
-         stationsJsonArray.map(stationJson => stations.push(new Station(
-                                                           stationJson.code,
-                                                           stationJson.name,
-                                                           stationJson.latitude,
-                                                           stationJson.longitude)));
-         return stations;
-
-    }
-    function getAllTrains(){
-         var sourceStationCodeValue = document.getElementById('sourceStationCode').value;//getting the element value by it's ID
-         var destinationStationCodeValue= document.getElementById('destinationStationCode').value;
-         var request = new XMLHttpRequest();
-         request.open('GET','http://localhost:8080/trains/'+sourceStationCodeValue+
-                     '/'+destinationStationCodeValue,false);
-         request.send(null);
-         var trainsJsonArray=JSON.parse(request.responseText);//loop through this json array,
-         //and convert each json objects to a station object add a station object to a station array
-         return trainsJsonArray.map(convertToTrain);
-
-    }
-    function convertToTrain(trainJson) {
-        return new Train(trainJson.number,
-                    	trainJson.name,
-                    	trainJson.sourceStation,
-                    	trainJson.destinationStation,
-                    	trainJson.trainStops.map(convertToTrainStop));
 
 
-    }
     const convertToTrainStop = trainStopJson =>
         new TrainStop(trainStopJson.arrivalTime,
                      trainStopJson.departureTime,
@@ -194,7 +123,7 @@
                   stationJson.latLng.longitude),
                   stationJson.code,
                   stationJson.name);
-}
+    }
      function getDummyTrains(){
     //return the list of all trains
     var trains = [new Train("1234","Erode exp",new Station((new LatLng(11.3410,77.7172)),"ED","Erode"),

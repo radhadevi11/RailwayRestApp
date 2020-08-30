@@ -9,7 +9,15 @@
 
     <script src="service.js"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmDJDvkorNNmPnv-uCOc8ArMpckF0FuYg&callback=arrayOfCities" async defer>
+    <script src="/views/AppView.js"></script>
+
+    <script>
+        function render() {
+            new AppView().render();
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmDJDvkorNNmPnv-uCOc8ArMpckF0FuYg&callback=render" async defer>
     </script>
 
     <meta charset="UTF-8">
@@ -79,7 +87,6 @@
 <body>
 <div id="map"></div>
 <div id="text">
-    <form >
         Enter the sourceStation :<br>
         <input type="text" name="sourceStation" id="sourceStation"  readonly>
         <br><br>
@@ -89,9 +96,8 @@
         <input type="text" name="destinationStation" id="destinationStation" readonly>
         <input type="hidden" name="destinationStationCode" id="destinationStationCode">
         <br><br>
-        <button onclick="getPossibleTrains();return false;">GetTrains</button>
+        <button id = "getTrains">GetTrains</button>
         <input type="reset" value="Clear">
-    </form>
     <div class="hidden" id="trainResult">
         <table id = "trainsTable" class="train">
             <thead>
