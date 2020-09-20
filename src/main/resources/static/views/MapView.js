@@ -1,38 +1,69 @@
-class MapView {
+export default class MapView {
 
-    constructor(onStationClick) {
-        this.map = new google.maps.Map(document.getElementById('map'), {/*google.maps.map constructor The ID where the map will place,which location will be center,How much the map will be zoom*/
-                    center:{lat:11.5246,lng: 77.4702},
-                    zoom:7
-              });
-        this.onStationClick = onStationClick;
+  constructor(map, onStationClick) {
+    this.map = map;
+    this.onStationClick = onStationClick;
+    this.stationPath;
+  }
+
+  render(mapViewModel) {
+    console.log("Map object "+ this.map);
+    mapViewModel.stations.forEach(station => this.addMarker(station, this.map));
+  }
+  renderTrain(mapViewModel) {
+    if(!mapViewModel.train) {
+      if(!this.stationPath) {
+        return;
+      }
+      this.stationPath.setMap(null);
     }
-    render(stations) {
-        stations.forEach(addMarker);
-    }
+    var currentTrainStops = mapViewModel.train.trainStops;
+    const stationPathCoordinates = currentTrainStops.map(trainStop =>
+      ({
+        lat: trainStop.latitude,
+        lng: trainStop.longitude
+      }));
 
-     addMarker(station){
-              var circle = new google.maps.Circle({
-                strokeColor: '#FF0000',
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: '#FF0000',
-                fillOpacity: 0.35,
-                map: this.map,
-                center: {lat : station.latitude, lng : station.longitude},
-                radius: 3000,
-                title:station.name
-              });
-               var name = station.name;
-               var code = station.code;
-               circle.addListener('click', () => this.onStationClick(station));
-               circle.addListener('mouseover',function(){
-                       document.getElementById('map').setAttribute('title',name);
-                     });
-               circle.addListener('mouseout',function(){
-                       document.getElementById('map').removeAttribute('title');
-                     });
+    this.stationPath = new google.maps.Polyline({
+      path: stationPathCoordinates,
+      strokeColor: '#FF0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
 
-        }
+    this.stationPath.setMap(this.map);
+
+  }
+  drawLines(train) {
+    
+  }
+  removeLine() {
+    
+  }
+
+  addMarker(station, map) {
+    var circle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: { lat: station.latitude, lng: station.longitude },
+      radius: 3000,
+      title: station.name
+    });
+    var name = station.name;
+    var code = station.code;
+    circle.addListener('click', () => this.onStationClick(station));
+    circle.addListener('mouseover', function () {
+      document.getElementById('map').setAttribute('title', name);
+    });
+    circle.addListener('mouseout', function () {
+      document.getElementById('map').removeAttribute('title');
+    });
+
+  }
+
 
 }

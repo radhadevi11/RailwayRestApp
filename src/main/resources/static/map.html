@@ -7,18 +7,17 @@
     <script src="train.js">
     </script>
 
-    <script src="service.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmDJDvkorNNmPnv-uCOc8ArMpckF0FuYg"></script>
+    
 
-    <script src="/views/AppView.js"></script>
+    <script src="App.js" type="module"></script>
 
-    <script>
-        function render() {
-            new AppView().render();
-        }
+    <script type="module">
+        import App from "/App.js";
+        document.body.onload = function() {const app = new App(); }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmDJDvkorNNmPnv-uCOc8ArMpckF0FuYg&callback=render" async defer>
-    </script>
+    
 
     <meta charset="UTF-8">
     <title>RailwayMap</title>
@@ -97,7 +96,7 @@
         <input type="hidden" name="destinationStationCode" id="destinationStationCode">
         <br><br>
         <button id = "getTrains">GetTrains</button>
-        <input type="reset" value="Clear">
+        <button id = "reset" >Clear</button>
     <div class="hidden" id="trainResult">
         <table id = "trainsTable" class="train">
             <thead>

@@ -1,34 +1,26 @@
 class AppView {
-
     constructor() {
-     this.mapView = new MapView(onStationClick);
-     this.trainView = new TrainView();
-    }
+     this.mapView = new MapView((station) => this.onStationClick(station));
+     //this.trainView = new TrainsView((train) => this.onTrainMouseOver(train), () => this.onTrainMouseOut());
 
+    }
     onStationClick(station) {
         this.trainView.onStationClicked(station);
     }
 
+    /*onTrainMouseOver(train) {
+        this.mapView.drawLines(train);
+    }
+    onTrainMouseOut() {
+        this.mapView.removeLine();
+    }*/
+
+
     render() {
-        mapView.render(getAllStations());
-        trainView.render();
+        this.mapView.render(this.getAllStations());
+       // this.trainView.render();
     }
 
-     getAllStations(){
-        var request = new XMLHttpRequest(); //creating a object with the type of XMLHTTPRequest()
-         request.open('GET','http://localhost:8080/stations',false); //open method with the 3 parameter
-         request.send(null);//request body is null
-         var stationsJsonArray=JSON.parse(request.responseText);//resposeText is a string
-         //loop through this json array,
-         //and convert each json objects to a station object add a station object to a station array
-         var stations=[] ;
-         stationsJsonArray.map(stationJson => stations.push(new Station(
-                                                           stationJson.code,
-                                                           stationJson.name,
-                                                           stationJson.latitude,
-                                                           stationJson.longitude)));
-         return stations;
-
-    }
+    
 
 }
