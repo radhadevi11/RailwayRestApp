@@ -6,51 +6,60 @@ export default class TrainsController {
                 trainsView.onGetTrainsClick(() => this.getAllTrains());
                 trainsView.onResetClick(() => this.clearInput());
                 trainsView.onTrainMouseOver((train) => this.onTrainMouseOver(train));
-                trainsView.onTrainMouseOut(() => this.onTrainMouseOut);
+                trainsView.onTrainMouseOut(() => this.onTrainMouseOut());
+
         }
 
 
         onStationClick(station) {
                 if (!this.trainsViewModel.sourceStation) {
-                       this.trainsViewModel.sourceStation = station;
+                        this.trainsViewModel.sourceStation = station;
+                        this.trainsViewModel.changeInfo = { sourceStationChanged: true };
                 }
                 else if (!this.trainsViewModel.destinationStation) {
-                 this.trainsViewModel.destinationStation = station;
+                        this.trainsViewModel.destinationStation = station;
+                        this.trainsViewModel.changeInfo = { destinationStationChanged: true };
                 }
                 else {
-                    return;
+                        return;
                 }
+
                 this.trainsView.render(this.trainsViewModel);
 
         }
         clearInput() {
-            this.trainsViewModel.trains = null;
-            this.trainsViewModel.sourceStation = null;
-            this.trainsViewModel.destinationStation = null;
-            this.trainsView.render(this.trainsViewModel);
+                this.trainsViewModel.trains = null;
+                this.trainsViewModel.sourceStation = null;
+                this.trainsViewModel.destinationStation = null;
+                this.trainsViewModel.changeInfo = { trainsChanged: true };
+                this.trainsView.render(this.trainsViewModel);
 
 
         }
         onTrainMouseOver(train) {
-            this.trainsViewModel.selectedTrain = train;
-            this.trainsView.render(this.trainsViewModel);
+                this.trainsViewModel.selectedTrain = train;
+                console.log("on mouse over, selected train = " + this.trainsViewModel.selectedTrain);
+                this.trainsViewModel.changeInfo = { selectedTrainChanged: true };
+                this.trainsView.render(this.trainsViewModel);
         }
-         onTrainMouseOut(train) {
-            this.trainsViewModel.selectedTrain = null;
-            this.trainsView.render(this.trainsViewModel);
-         }
+        onTrainMouseOut() {
+                this.trainsViewModel.selectedTrain = null;
+                this.trainsViewModel.changeInfo = { selectedTrainChanged: true };
+                console.log("on mouse out, selected train =" + this.trainsViewModel.selectedTrain);
+                this.trainsView.render(this.trainsViewModel);
+        }
 
         getAllTrains() {
-                var request = new XMLHttpRequest();
-                request.open('GET', 'http://localhost:8080/trains/' + this.trainsViewModel.sourceStation.code +
-                        '/' + this.trainsViewModel.destinationStation.code, false);
-                request.send(null);
-                var trainsJsonArray = JSON.parse(request.responseText);//loop through this json array,
-                //and convert each json objects to a station object add a station object to a station array
-                //update model
-                this.trainsViewModel.trains = trainsJsonArray.map((trainJson) => this.convertToTrain(trainJson));
-                //render view
-                this.trainsView.render(this.trainsViewModel);
+                window.fetch('http://localhost:8080/trains/' + this.trainsViewModel.sourceStation.code +
+                        '/' + this.trainsViewModel.destinationStation.code)
+                        .then(response => response.json())
+                        .then(trainsJsonArray => {
+                                this.trainsViewModel.trains = trainsJsonArray.map((trainJson) => this.convertToTrain(trainJson));
+                                //render view
+                                this.trainsViewModel.changeInfo = { trainsChanged: true };
+                                this.trainsView.render(this.trainsViewModel);
+                        })
+                
 
         }
         convertToTrain(trainJson) {

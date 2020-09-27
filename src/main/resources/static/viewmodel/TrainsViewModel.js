@@ -4,6 +4,7 @@ export default class TrainsViewModel {
         this.destinationStation = destinationStation;
         this.trains = trains;
         this.selectedTrain = selectedTrain;
+        this.changeInfo = {};
 
     }
 }

@@ -4,6 +4,11 @@ import TrainsController from '/controller/TrainsController.js';
 import MapView from '/views/MapView.js';
 import MapViewModel from '/viewmodel/MapViewModel.js';
 import MapViewController from '/controller/MapViewController.js';
+import TrainStopsController from '/controller/TrainStopsController.js';
+import TrainStopsView from '/views/TrainStopsView.js';
+import TrainStopsViewModel from '/viewmodel/TrainStopsViewModel.js';
+
+
 export default class App {
   constructor() {
     this.map = new google.maps.Map(document.getElementById('map'), {/*google.maps.map constructor The ID where the map will place,which location will be center,How much the map will be zoom*/
@@ -14,10 +19,14 @@ export default class App {
     const trainsViewModel = new TrainsViewModel(null, null, null, null);
     const trainsController = new TrainsController(trainsView, trainsViewModel);
     const mapView = new MapView(this.map, (station) => trainsController.onStationClick(station));
-    console.log("Mapview's Map object:"+mapView.map);
+    console.log("Mapview's Map object:" + mapView.map);
     const mapViewModel = new MapViewModel(this.getAllStations());
     const mapViewController = new MapViewController(mapView, mapViewModel);
-    console.log("mapViewController mapView map:"+mapViewController.mapView.map);
+    const trainStopsView = new TrainStopsView();
+    const trainStopsViewModel = new TrainStopsViewModel(null);
+    const trainStopsController = new TrainStopsController(trainStopsView, trainStopsViewModel);
+    trainsView.onTrainSelect((train) => trainStopsController.onTrainClick(train));
+    console.log("mapViewController mapView map:" + mapViewController.mapView.map);
 
   }
   getAllStations() {
