@@ -7,7 +7,6 @@ export default class MapView {
   }
 
   render(mapViewModel) {
-    console.log("Map object " + this.map);
     mapViewModel.stations.forEach(station => this.addMarker(station, this.map));
   }
   renderTrain(mapViewModel) {

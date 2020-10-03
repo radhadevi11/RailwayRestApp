@@ -1,5 +1,5 @@
 
-class Station {
+export default class Station {
     constructor(code, name, latitude, longitude) {
         this.code = code;
         this.name = name;

@@ -7,7 +7,7 @@ import MapViewController from '/controller/MapViewController.js';
 import TrainStopsController from '/controller/TrainStopsController.js';
 import TrainStopsView from '/views/TrainStopsView.js';
 import TrainStopsViewModel from '/viewmodel/TrainStopsViewModel.js';
-
+import Station from './station.js';
 
 export default class App {
   constructor() {
@@ -19,30 +19,37 @@ export default class App {
     const trainsViewModel = new TrainsViewModel(null, null, null, null);
     const trainsController = new TrainsController(trainsView, trainsViewModel);
     const mapView = new MapView(this.map, (station) => trainsController.onStationClick(station));
-    console.log("Mapview's Map object:" + mapView.map);
-    const mapViewModel = new MapViewModel(this.getAllStations());
-    const mapViewController = new MapViewController(mapView, mapViewModel);
+    this.getAllStations().then((stations) => {
+      const mapViewModel = new MapViewModel(stations);
+      const mapViewController = new MapViewController(mapView, mapViewModel);
+
+    });
     const trainStopsView = new TrainStopsView();
     const trainStopsViewModel = new TrainStopsViewModel(null);
     const trainStopsController = new TrainStopsController(trainStopsView, trainStopsViewModel);
     trainsView.onTrainSelect((train) => trainStopsController.onTrainClick(train));
-    console.log("mapViewController mapView map:" + mapViewController.mapView.map);
 
   }
   getAllStations() {
-    var request = new XMLHttpRequest(); //creating a object with the type of XMLHTTPRequest()
-    request.open('GET', 'http://localhost:8080/stations', false); //open method with the 3 parameter
-    request.send(null);//request body is null
-    var stationsJsonArray = JSON.parse(request.responseText);//resposeText is a string
-    //loop through this json array,
-    //and convert each json objects to a station object add a station object to a station array
+
+    return window.fetch('http://localhost:8080/stations')
+      .then(response => response.json())
+      .then(stationsJsonArray =>
+        stationsJsonArray.map((stationJson) =>
+          this.convertToStation(stationJson)));
+
+
+  }
+  convertToStations(stationsJsonArray) {
     var stations = [];
-    stationsJsonArray.map(stationJson => stations.push(new Station(
+    stationsJsonArray.forEach(stationJson => stations.push(this.convertToStation(stationJson)));
+    return stations;
+  }
+  convertToStation(stationJson) {
+    return new Station(
       stationJson.code,
       stationJson.name,
       stationJson.latitude,
-      stationJson.longitude)));
-    return stations;
-
+      stationJson.longitude);
   }
 }

@@ -1,3 +1,5 @@
+import Train from '../train.js';
+import TrainStop from '../trainStop.js';
 
 export default class TrainsController {
         constructor(trainsView, trainsViewModel) {
@@ -31,21 +33,22 @@ export default class TrainsController {
                 this.trainsViewModel.trains = null;
                 this.trainsViewModel.sourceStation = null;
                 this.trainsViewModel.destinationStation = null;
-                this.trainsViewModel.changeInfo = { trainsChanged: true };
+                this.trainsViewModel.changeInfo = {
+                        sourceStationChanged: true, destinationStationChanged: true,
+                        trainsChanged: true
+                };
                 this.trainsView.render(this.trainsViewModel);
 
 
         }
         onTrainMouseOver(train) {
                 this.trainsViewModel.selectedTrain = train;
-                console.log("on mouse over, selected train = " + this.trainsViewModel.selectedTrain);
                 this.trainsViewModel.changeInfo = { selectedTrainChanged: true };
                 this.trainsView.render(this.trainsViewModel);
         }
         onTrainMouseOut() {
                 this.trainsViewModel.selectedTrain = null;
                 this.trainsViewModel.changeInfo = { selectedTrainChanged: true };
-                console.log("on mouse out, selected train =" + this.trainsViewModel.selectedTrain);
                 this.trainsView.render(this.trainsViewModel);
         }
 
@@ -59,7 +62,7 @@ export default class TrainsController {
                                 this.trainsViewModel.changeInfo = { trainsChanged: true };
                                 this.trainsView.render(this.trainsViewModel);
                         })
-                
+
 
         }
         convertToTrain(trainJson) {

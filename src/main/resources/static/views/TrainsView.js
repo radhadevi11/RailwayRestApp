@@ -44,7 +44,6 @@ export default class TrainsView {
     const tBody = this.clearTrainsTable();
     if (trains) {
       if (trains.length == 0) {
-        alert("There is no train available for this stations");
         return;
       }
       document.getElementById("trainResult").setAttribute("class", "visible");
@@ -71,7 +70,6 @@ export default class TrainsView {
     //row.addEventListener("click", );
     row.addEventListener("mouseenter", () => this.onTrainMouseOverHandler(train));
     row.addEventListener("mouseleave", () => {
-      console.log("calling onTrainMouseOutHandler");
       this.onTrainMouseOutHandler();
     });
 
@@ -94,11 +92,9 @@ export default class TrainsView {
   }
   renderSelectedTrain(selectedTrain) {
     if (selectedTrain) {
-      console.log("drawlines");
       this.drawLines(selectedTrain);
     }
     else {
-      console.log("remove lines");
       this.removeLines();
     }
   }

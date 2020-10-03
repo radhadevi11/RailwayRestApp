@@ -2,23 +2,13 @@
 <html lang="en">
 
 <head>
-    <script src="station.js">
-    </script>
-
-    <script src="train.js">
-    </script>
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmDJDvkorNNmPnv-uCOc8ArMpckF0FuYg"></script>
-
-
     <script src="App.js" type="module"></script>
 
     <script type="module">
         import App from "/App.js";
         document.body.onload = function () { const app = new App(); }
     </script>
-
-
 
     <meta charset="UTF-8">
     <title>RailwayMap</title>
@@ -107,11 +97,8 @@
         Enter the sourceStation :<br>
         <input type="text" name="sourceStation" id="sourceStation" readonly>
         <br><br>
-        <input type="hidden" id="sourceStationCode" name="sourceStationCode">
-
         Enter the destinationStation :<br>
         <input type="text" name="destinationStation" id="destinationStation" readonly>
-        <input type="hidden" name="destinationStationCode" id="destinationStationCode">
         <br><br>
         <button id="getTrains">GetTrains</button>
         <button id="reset">Clear</button>
@@ -145,7 +132,7 @@
                 </tbody>
 
             </table>
-            <button id = "closePopUp">Close</button>
+            <button id="closePopUp">Close</button>
         </div>
     </div>
 </body>
